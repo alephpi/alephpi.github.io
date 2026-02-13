@@ -1,0 +1,18 @@
+import{_ as a,c as n,ap as s,o as p}from"./chunks/framework.CCxIPCIe.js";const x=JSON.parse('{"title":"安装zotero","description":"","frontmatter":{"title":"安装zotero","date":"2023-03-31T22:00:00.000Z","length":"643字","time":"3分钟","aside":true,"hash":321126704},"headers":[],"relativePath":"note/Linux/安装zotero.md","filePath":"note/Linux/安装zotero.md"}'),o={name:"note/Linux/安装zotero.md"};function t(i,e,l,c,r,d){return p(),n("div",null,e[0]||(e[0]=[s(`<p>系统版本：Deepin v20.8</p><p>Deepin 商店自带很多软件，一键式安装非常方便。不过有些软件年久失更，譬如 Zotero。此时商店版本为 6.0.18，而官方版本已经到了 6.0.23（相差半年多了）。官方商店安装的版本不支持应用内自动更新，于是我又卸载掉，重新从官网上安装了。</p><p>官方版本是一个下载包 tarball，按照指示安装完毕后，出现两个问题：</p><ol><li>提示 <code>unable to load translators and styles</code></li><li>生成的<code>.desktop</code>双击没有反应</li></ol><p>对于第一点，原因应为 zotero 的数据文件夹限制其的访问，但什么限制了它，并不清楚。网上也没有统一的解决办法。我猜是因为上一个商店版本遗留的配置项残存在数据文件夹中，索性就全部删除了数据文件夹<code>~/zotero</code>和配置文件<code>~/.zotero</code>。再重新安装一遍 tarball，问题果然消失了。</p><p>对于第二点，我折腾了好久。官方步骤中的 symlink 发送到<code>~/.local/share/applications/zotero.desktop</code>显示已损坏，直接双击原文件夹的<code>.desktop</code>也没有反应。但是直接在终端运行<code>./zotero</code>,是能够成功开启应用的。那么说明不是应用本身的问题。于是我用文本编辑器打开<code>.desktop</code>，发现其中是这样写的：</p><div class="language-"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki solarized-dark vp-code" tabindex="0"><code><span class="line"><span>[Desktop Entry]</span></span>
+<span class="line"><span>Name=Zotero</span></span>
+<span class="line"><span>Exec=bash -c &quot;$(dirname $(realpath $(echo %k | sed -e &#39;s/^file:\\/\\///&#39;)))/zotero -url %U&quot;</span></span>
+<span class="line"><span>Icon=/opt/zotero/chrome/icons/default/default256.png</span></span>
+<span class="line"><span>Type=Application</span></span>
+<span class="line"><span>Terminal=false</span></span>
+<span class="line"><span>Categories=Office;</span></span>
+<span class="line"><span>MimeType=text/plain;x-scheme-handler/zotero;application/x-research-info-systems;text/x-research-info-systems;text/ris;application/x-endnote-refer;application/x-inst-for-Scientific-info;application/mods+xml;application/rdf+xml;application/x-bibtex;text/x-bibtex;application/marc;application/vnd.citationstyles.style+xml</span></span>
+<span class="line"><span>X-GNOME-SingleWindow=true</span></span></code></pre></div><p>好嘛，密密麻麻一大堆。注意到 exec 那一行，用了一堆很繁琐的相对路径啥的，在命令行也是能运行的，但不知为何双击运行不成功。对比从 debian 包安装的 edge-beta，来看看它的<code>.desktop</code>是怎么写的：</p><div class="language-"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki solarized-dark vp-code" tabindex="0"><code><span class="line"><span>Exec=/usr/bin/microsoft-edge-beta %U</span></span>
+<span class="line"><span>StartupNotify=true</span></span>
+<span class="line"><span>Terminal=false</span></span>
+<span class="line"><span>Icon=microsoft-edge-beta</span></span>
+<span class="line"><span>Type=Application</span></span>
+<span class="line"><span>Categories=Network;WebBrowser;</span></span>
+<span class="line"><span>MimeType=application/pdf;application/rdf+xml;application/rss+xml;application/xhtml+xml;application/xhtml_xml;application/xml;image/gif;image/jpeg;image/png;image/webp;text/html;text/xml;x-scheme-handler/http;x-scheme-handler/https;</span></span>
+<span class="line"><span>Actions=new-window;new-private-window;</span></span>
+<span class="line"><span>X-Deepin-CreatedBy=com.deepin.dde.daemon.Launcher</span></span>
+<span class="line"><span>X-Deepin-AppID=microsoft-edge-beta</span></span></code></pre></div><p>嗯，exec 写的很简单，于是乎我干脆把 exec 改成绝对路径<code>bash -c /opt/zotero/zotero</code>这下就能直接打开了。（因为是绝对路径，就没用 symlink，直接在桌面创建了这个<code>.desktop</code>）</p>`,10)]))}const f=a(o,[["render",t]]);export{x as __pageData,f as default};
